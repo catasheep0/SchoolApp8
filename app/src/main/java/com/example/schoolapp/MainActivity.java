@@ -2,8 +2,11 @@ package com.example.schoolapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.view.View;
@@ -36,6 +39,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void launchTeacherDetail() {
+        Intent intent = new Intent(this, TeacherDetail.class);
+        startActivity(intent);
+    }
+
+
+
     public void logIn(View view) throws Exception {
         EditText name = (EditText)findViewById(R.id.logInName);
         EditText password = (EditText)findViewById(R.id.logInPassword);
@@ -44,7 +65,13 @@ public class MainActivity extends AppCompatActivity {
         obj.put("password", password.getText());
         TextView txt = (TextView)findViewById(R.id.testText);
         Requests.jsonText(this, Requests.POST,"/api/teacherlog", obj,
-                (str) -> txt.setText(str),
-                (err) -> txt.setText(err.toString()));
+                (str) -> {if(str == "bad") txt.setText("Wrong username or password");
+                            else {
+                                txt.setText(str);
+                                UserData.userName = name.getText().toString();
+                                launchTeacherDetail();
+                            }
+                            hideKeyboard(this);},
+                (err) -> {txt.setText("Error"); hideKeyboard(this);});
     }
 }

@@ -45,6 +45,7 @@ public class Requests {
 
     static Context context;
 
+
     public static final String host = "http://10.0.2.2:8000";
 
     public static void request(Context c, String path, final RequestResponse resp, final RequestError err) {
