@@ -95,4 +95,5 @@
     <string name="title_home">Tests</string>
     <string name="title_dashboard">Lessons</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_activity_test">TestActivity</string>
 </resources>

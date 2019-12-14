@@ -81,7 +81,10 @@ public class CourseActivity extends AppCompatActivity implements BottomNavigatio
                 fragment.setArguments(bundle);
                 break;
             case R.id.navigation_dashboard:
+                bundle = new Bundle();
+                bundle.putString("lessons", lessons.toString());
                 fragment = new DashboardFragment();
+                fragment.setArguments(bundle);
                 break;
         }
 

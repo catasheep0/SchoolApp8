@@ -1,28 +1,25 @@
 package com.example.schoolapp.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.ListAdapter;
 
-import com.example.schoolapp.CourseActivity;
 import com.example.schoolapp.R;
+import com.example.schoolapp.TestActivity;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -50,6 +47,10 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    public void launchTestActivity(JSONObject obj) {
+
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         JSONArray tests = null;
@@ -62,9 +63,23 @@ public class HomeFragment extends Fragment {
                     testArray.add(tests.getJSONObject(i));
             } catch (Exception e){}
             adapter = new TestAdapter(getContext(), testArray);
-            ((ListView)root.findViewById(R.id.test_list_view)).setAdapter(adapter);
+            ListView lv = ((ListView)root.findViewById(R.id.score_list_view));
+            lv.setAdapter(adapter);
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    try {
+                        Intent intent = new Intent(getContext(), TestActivity.class);
+                        JSONObject obj = (JSONObject) parent.getItemAtPosition(position);
+                        intent.putExtra("name", obj.getString("name"));
+                        intent.putExtra("id", obj.getInt("test_id"));
+                        startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
-            Log.d("tests", tests.toString());
         }
         return root;
     }
