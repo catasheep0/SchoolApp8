@@ -42,7 +42,9 @@ public class HomeFragment extends Fragment {
             }
             try {
                 ((TextView)convert.findViewById(R.id.test_item_name)).setText(obj.getString("name"));
-            } catch (Exception e){}
+            } catch (Exception e) {
+
+            }
             return convert;
         }
     }

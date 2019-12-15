@@ -69,6 +69,7 @@ public class Requests {
 
     public final static int GET = Request.Method.GET;
     public final static int POST = Request.Method.POST;
+    public final static int PUT = Request.Method.PUT;
 
     public static void json(Context c, int method, String path, JSONObject body, final RequestJSONResponse resp, final RequestError err) {
         String url = host + path;

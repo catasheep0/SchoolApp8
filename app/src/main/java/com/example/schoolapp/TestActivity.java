@@ -77,6 +77,7 @@ public class TestActivity extends AppCompatActivity {
                     Log.d("response", res);
                     try {
                         JSONObject object = new JSONObject(res);
+                        JSONObject testObject = object.getJSONObject("test");
                         JSONArray array = object.getJSONArray("score");
                         for(int i = 0; i < array.length(); i++)
                             objectList.add((JSONObject) array.get(i));
@@ -89,6 +90,10 @@ public class TestActivity extends AppCompatActivity {
                                     JSONObject obj = (JSONObject)parent.getItemAtPosition(position);
                                     Intent intent = new Intent(parent.getContext(), ScoreActivity.class);
                                     intent.putExtra("id", obj.getInt("score_id"));
+                                    intent.putExtra("object", obj.toString());
+                                    intent.putExtra("min", testObject.getInt("minimum"));
+                                    intent.putExtra("max", testObject.getInt("maximum"));
+
                                     startActivity(intent);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
