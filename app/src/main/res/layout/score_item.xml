@@ -14,12 +14,12 @@
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="305dp"
+        android:layout_width="187dp"
         android:layout_height="match_parent" />
 
     <Space
         android:id="@+id/view"
-        android:layout_width="25dp"
-        android:layout_height="match_parent"/>
+        android:layout_width="151dp"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

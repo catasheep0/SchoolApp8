@@ -1,6 +1,7 @@
 package com.example.schoolapp.ui.dashboard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.schoolapp.LessonActivity;
 import com.example.schoolapp.R;
 
 import org.json.JSONArray;
@@ -61,8 +63,9 @@ public class DashboardFragment extends Fragment {
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast t = Toast.makeText(getContext(), "TheStalwart", Toast.LENGTH_LONG);
-                    t.show();
+                    Intent intent = new Intent(getContext(), LessonActivity.class);
+                    intent.putExtra("object", parent.getItemAtPosition(position).toString());
+                    startActivity(intent);
                 }
             });
 

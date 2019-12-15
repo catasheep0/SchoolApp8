@@ -81,6 +81,8 @@ public class TestActivity extends AppCompatActivity {
                         JSONArray array = object.getJSONArray("score");
                         for(int i = 0; i < array.length(); i++)
                             objectList.add((JSONObject) array.get(i));
+                        TextView tv = findViewById(R.id.test_description);
+                        tv.setText(testObject.getString("description"));
                         adapter = new ScoreAdapter(this, objectList, object.getJSONObject("test").getInt("maximum"));
                         lv.setAdapter(adapter);
                         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -106,13 +108,7 @@ public class TestActivity extends AppCompatActivity {
 
                 },
                 (res) -> Log.e("responseError", res.toString()));
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
     }
 
     @Override
@@ -126,7 +122,7 @@ public class TestActivity extends AppCompatActivity {
                     Log.d("return", jsonStr);
                     objectList.set(data.getIntExtra("index", 0), json);
                     synchronized (adapter) {
-                        adapter.notify();
+                        adapter.notifyDataSetChanged();
                     }
                     //description.setText(json.getString("commentary"));
                     //score_column.setText(json.getString("points"));

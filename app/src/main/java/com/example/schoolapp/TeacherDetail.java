@@ -78,12 +78,22 @@ public class TeacherDetail extends AppCompatActivity {
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+        fab.setOnClickListener((view) -> {
+            Intent i = getIntent();
+            Intent intent = new Intent(this, Settings.class);
+            Log.d("file", i.getStringExtra("passwd"));
+            intent.putExtra("passwd", i.getStringExtra("passwd"));
+            intent.putExtra("login", i.getStringExtra("login"));
+            startActivityForResult(intent, 1);
         });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+
+            }
+        }
     }
 }

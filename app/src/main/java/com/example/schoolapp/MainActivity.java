@@ -28,14 +28,17 @@ public class MainActivity extends AppCompatActivity {
 
         TextView txt = (TextView)findViewById(R.id.testText);
         EditText login = (EditText)findViewById(R.id.logInName);
-        /*Requests.jsonText(this, Requests.POST,"/api/course/2",
-            (str) -> {
-                //JSONObject obj = Requests.handle(str);
-                if(str)
+        Log.d("test", "shore");
+        try {
+            String str = SettingsFile.getSettings(this);
+            if(str != null) {
+                JSONObject obj = new JSONObject(str);
+                launchTeacherDetail(obj.getString("passwd"), obj.getString("login"));
+            }
+        } catch (Exception e) {
 
-            },
-            (err) -> txt.setText(err.toString())
-        );*/
+        }
+        //Log.d("file", .toString());
 
     }
 
@@ -50,8 +53,11 @@ public class MainActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void launchTeacherDetail() {
+    public void launchTeacherDetail(String passwd, String login) {
         Intent intent = new Intent(this, TeacherDetail.class);
+        intent.putExtra("passwd", passwd);
+        intent.putExtra("login", login);
+        UserData.userName = login;
         startActivity(intent);
     }
 
@@ -69,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
                             else {
                                 txt.setText(str);
                                 UserData.userName = name.getText().toString();
-                                launchTeacherDetail();
+                                try {
+                                    launchTeacherDetail(obj.getString("password"), obj.getString("login"));
+                                } catch (Exception e) {e.printStackTrace();}
                             }
                             hideKeyboard(this);},
                 (err) -> {txt.setText("Error"); hideKeyboard(this);});
