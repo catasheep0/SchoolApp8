@@ -25,7 +25,7 @@ import androidx.navigation.ui.NavigationUI;
 public class CourseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     public static JSONArray tests, lessons;
-
+    BottomNavigationView nav;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.wtf("request", "hello");
@@ -33,10 +33,28 @@ public class CourseActivity extends AppCompatActivity implements BottomNavigatio
 
         setContentView(R.layout.activity_course);
         Log.d("request", "after set content");
-        BottomNavigationView nav = findViewById(R.id.nav_view);
+        nav = findViewById(R.id.nav_view);
+    }
 
+    private boolean loadFragment(Fragment fragment) {
+        //switching fragment
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.nav_host_fragment, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refresh();
+    }
 
+    void refresh() {
         Integer id = getIntent().getIntExtra("id", 0);
         Requests.request(this, "/api/course/" + id.toString(),(res) -> {
             Log.d("request", res);
@@ -56,18 +74,6 @@ public class CourseActivity extends AppCompatActivity implements BottomNavigatio
         }, (res) -> {
             Log.d("request", res.toString());
         });
-    }
-
-    private boolean loadFragment(Fragment fragment) {
-        //switching fragment
-        if (fragment != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.nav_host_fragment, fragment)
-                    .commit();
-            return true;
-        }
-        return false;
     }
 
     @Override

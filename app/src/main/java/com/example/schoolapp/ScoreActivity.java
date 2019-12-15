@@ -10,12 +10,12 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ScoreActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
+public class ScoreActivity extends AppCompatActivity  {
 
-    TextView score, description, student, score_column;
-    SeekBar seekBar;
+    TextView description, student, score_column;
     int min, max, seekMax;
     String jsonStr;
 
@@ -30,8 +30,6 @@ public class ScoreActivity extends AppCompatActivity implements SeekBar.OnSeekBa
             Intent intent = getIntent();
             JSONObject json = new JSONObject(intent.getStringExtra("object"));
             jsonStr = intent.getStringExtra("object");
-            score = findViewById(R.id.score_value);
-            seekBar = findViewById(R.id.score_slider);
             description = findViewById(R.id.score_description);
             student = findViewById(R.id.score_student_name);
             score_column = findViewById(R.id.score_column);
@@ -44,17 +42,9 @@ public class ScoreActivity extends AppCompatActivity implements SeekBar.OnSeekBa
             seekMax = (int)(dmax * 10);
             double diff = dmax - dmin;
             double difp = points - dmin;
-            seekBar.setMax(0);
-            seekBar.setMax(seekMax);
-            seekBar.setProgress((int) (points * 10));
-            seekBar.refreshDrawableState();
             description.setText(json.getString("commentary"));
             student.setText(json.getString("student_login"));
             score_column.setText(String.format("%.1f out of %d", points, max));
-
-            seekBar.setOnSeekBarChangeListener(this);
-            score.setText(String.format("%.2f", points));
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,22 +55,35 @@ public class ScoreActivity extends AppCompatActivity implements SeekBar.OnSeekBa
         Intent intent = new Intent(this, EditScoreActivity.class);
         intent.putExtra("object", jsonStr);
         intent.putExtra("max", max);
-        startActivity(intent);
+        startActivityForResult(intent, 1);
     }
 
     @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        Log.d("seek", Integer.toString(progress));
-        score.setText(Double.toString(((double) progress)/ 10));
+    public void onBackPressed() {
+
+        Intent i = new Intent();
+        i.putExtra("object", jsonStr);
+        i.putExtra("index", getIntent().getIntExtra("index", 0));
+        setResult(RESULT_OK, i);
+
+        super.onBackPressed();
     }
 
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    jsonStr = data.getStringExtra("object");
+                    JSONObject json = new JSONObject(jsonStr);
+                    description.setText(json.getString("commentary"));
+                    score_column.setText(json.getString("points"));
+                }catch (JSONException e) {e.printStackTrace();}
+            }
+        }
     }
 
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-
-    }
 }
+
+

@@ -49,7 +49,10 @@ public class EditScoreActivity extends AppCompatActivity implements SeekBar.OnSe
         json.put("commentary", desc.getText());
         Requests.json(this, Requests.PUT,"/api/score", json,
                 (res) -> {
-                    Toast.makeText(this, res.toString(), Toast.LENGTH_LONG).show();
+                    Intent i = new Intent();
+                    i.putExtra("object", json.toString());
+                    setResult(RESULT_OK, i);
+                    finish();
                 },
                 (res) -> {
                     Toast.makeText(this, res.toString(), Toast.LENGTH_LONG).show();

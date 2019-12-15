@@ -93,8 +93,8 @@ public class TestActivity extends AppCompatActivity {
                                     intent.putExtra("object", obj.toString());
                                     intent.putExtra("min", testObject.getInt("minimum"));
                                     intent.putExtra("max", testObject.getInt("maximum"));
-
-                                    startActivity(intent);
+                                    intent.putExtra("index", position);
+                                    startActivityForResult(intent, 1);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -115,4 +115,23 @@ public class TestActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    String jsonStr = data.getStringExtra("object");
+                    JSONObject json = new JSONObject(jsonStr);
+                    Log.d("return", jsonStr);
+                    objectList.set(data.getIntExtra("index", 0), json);
+                    synchronized (adapter) {
+                        adapter.notify();
+                    }
+                    //description.setText(json.getString("commentary"));
+                    //score_column.setText(json.getString("points"));
+                }catch (JSONException e) {e.printStackTrace();}
+            }
+        }
+    }
 }
