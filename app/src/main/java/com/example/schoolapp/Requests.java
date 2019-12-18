@@ -48,11 +48,11 @@ public class Requests {
 
     public static final String host = "http://10.0.2.2:8000";
 
-    public static void request(Context c, String path, final RequestResponse resp, final RequestError err) {
+    public static void request(Context c, String path, int method, final RequestResponse resp, final RequestError err) {
         String url = host + path;
 
         RequestQueue queue = Volley.newRequestQueue(c);
-        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(method, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
@@ -70,6 +70,7 @@ public class Requests {
     public final static int GET = Request.Method.GET;
     public final static int POST = Request.Method.POST;
     public final static int PUT = Request.Method.PUT;
+    public final static int DELETE = Request.Method.DELETE;
 
     public static void json(Context c, int method, String path, JSONObject body, final RequestJSONResponse resp, final RequestError err) {
         String url = host + path;

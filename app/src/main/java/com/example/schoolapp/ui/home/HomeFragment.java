@@ -56,6 +56,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         JSONArray tests = null;
+
         try{tests = new JSONArray(getArguments().getString("tests"));}catch (Exception e){} catch (Error e){}
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         if(tests != null) {
@@ -75,6 +76,7 @@ public class HomeFragment extends Fragment {
                         JSONObject obj = (JSONObject) parent.getItemAtPosition(position);
                         intent.putExtra("name", obj.getString("name"));
                         intent.putExtra("id", obj.getInt("test_id"));
+                        intent.putExtra("course_id", obj.getInt("course_id"));
                         startActivity(intent);
                     } catch (JSONException e) {
                         e.printStackTrace();

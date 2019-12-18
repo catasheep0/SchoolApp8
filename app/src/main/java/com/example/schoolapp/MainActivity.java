@@ -71,8 +71,19 @@ public class MainActivity extends AppCompatActivity {
         obj.put("password", password.getText());
         TextView txt = (TextView)findViewById(R.id.testText);
         Requests.jsonText(this, Requests.POST,"/api/teacherlog", obj,
-                (str) -> {if(str == "bad") txt.setText("Wrong username or password");
-                            else {
+                (str) -> {
+                            Log.d("log", String.format("<%s>", str) );
+
+                            if(str.equals("bad")) {
+                                txt.setText("Wrong username or password");
+                                Log.d("log", String.format("<%s> HERE", str));
+                                return;
+                            } else if(str.equals("admin")) {
+                                Intent intent = new Intent(this, SearchStudentAdmin.class);
+                                startActivity(intent);
+
+                            } else {
+                                Log.d("log", String.format("<%s> 789", str) );
                                 txt.setText(str);
                                 UserData.userName = name.getText().toString();
                                 try {

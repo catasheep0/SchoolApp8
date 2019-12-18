@@ -28,9 +28,8 @@ public class CourseActivity extends AppCompatActivity implements BottomNavigatio
     BottomNavigationView nav;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.wtf("request", "hello");
         super.onCreate(savedInstanceState);
-
+        getSupportActionBar().setTitle("Course");
         setContentView(R.layout.activity_course);
         Log.d("request", "after set content");
         nav = findViewById(R.id.nav_view);
@@ -56,7 +55,8 @@ public class CourseActivity extends AppCompatActivity implements BottomNavigatio
 
     void refresh() {
         Integer id = getIntent().getIntExtra("id", 0);
-        Requests.request(this, "/api/course/" + id.toString(),(res) -> {
+
+        Requests.request(this, "/api/course/" + id.toString(), Requests.GET ,(res) -> {
             Log.d("request", res);
             try {
                 JSONObject result = new JSONObject(res);
@@ -81,10 +81,12 @@ public class CourseActivity extends AppCompatActivity implements BottomNavigatio
         Fragment fragment = null;
         switch (menuItem.getItemId()) {
             case R.id.navigation_home:
+
                 Bundle bundle = new Bundle();
                 bundle.putString("tests", tests.toString());
                 fragment = new HomeFragment();
                 fragment.setArguments(bundle);
+
                 break;
             case R.id.navigation_dashboard:
                 bundle = new Bundle();

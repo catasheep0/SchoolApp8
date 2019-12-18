@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,9 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,7 +36,7 @@ public class TeacherDetail extends AppCompatActivity {
             mAdapter = new TeacherAdapter(json.getJSONArray("courses"), (obj) -> {
                 Intent i = new Intent(this, CourseActivity.class);
 
-                try{i.putExtra("id", obj.getInt("id"));}catch (Exception e){}
+                try{i.putExtra("id", obj.getInt("course_id"));}catch (Exception e){}
                 startActivity(i);
             });
             recyclerView.setAdapter(mAdapter);
@@ -68,7 +64,7 @@ public class TeacherDetail extends AppCompatActivity {
 
 
 
-        Requests.request(this, "/api/teacher/" + UserData.userName,
+        Requests.request(this, "/api/teacher/" + UserData.userName, Requests.GET,
                 (str) -> setUpAfterRequest(str),
                 (err) -> err.printStackTrace());
 
@@ -77,7 +73,7 @@ public class TeacherDetail extends AppCompatActivity {
 
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_student_button);
         fab.setOnClickListener((view) -> {
             Intent i = getIntent();
             Intent intent = new Intent(this, Settings.class);
